@@ -15,13 +15,12 @@ campusRouter.get('/', function(req, res, next){
 //POST route: add new campus
 campusRouter.post('/', function(req, res, next){
   Campus.findOrCreate({
-    where: {
-      name: req.body.name,
-      description: req.body.description,
-      image: req.body.image
-    }
+    where: req.body
   })
-  .then(newCampus => res.json(newCampus))
+  .then(function(newCampus){
+    console.log('campusrouter.post created new campus: ', newCampus);
+    res.json(newCampus)
+  })
   .catch(next);
 });
 

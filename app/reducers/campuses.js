@@ -1,8 +1,10 @@
+//returns an array of campuses
 import axios from 'axios';
 
 const GET_CAMPUSES = 'GET_CAMPUSES';
-const GET_CAMPUS = 'GET_CAMPUS';
-//const EDIT_CAMPUS = 'EDIT_CAMPUS';
+const UPDATE_CAMPUS = 'UPDATE_CAMPUS';
+const CREATE_CAMPUS = 'CREATE_CAMPUS';
+const DELETE_CAMPUS = 'DELETE_CAMPUS';
 
 // ACTION CREATORS
 export function getCampuses (campuses) {
@@ -10,26 +12,22 @@ export function getCampuses (campuses) {
   return action;
 }
 
-export function getCampus (campus) {
-  const action = { type: GET_CAMPUS, campus };
+export function updateCampus (campus) {
+  const action = { type: UPDATE_CAMPUS, campus };
   return action;
 }
 
-// THUNK CREATORS
-//updating an existing campus
-export function updateCampus (campusId, history) {
-  return function thunk (dispatch) {
-    return axios.put(`/api/campuses/${campusId}`)
-      .then(res => res.data)
-      .then(editedCampus => {
-        const action = getCampuses();
-        console.log('updated campus from ajax call', editedCampus);
-        dispatch(action);
-        history.push(`/campuses/${editedCampus[0].id}`);
-      });
-  };
+export function createCampus (campus) {
+  const action = { type: CREATE_CAMPUS, campus };
+  return action;
 }
 
+export function deleteCampus (campusId) {
+  const action = { type: DELETE_CAMPUS, campusId };
+  return action;
+}
+
+// THUNK CREATORS -- MIDDLEWARE THAT DISPATCHES ACTIONS
 export function fetchCampuses () {
   return function thunk (dispatch) {
     return axios.get('/api/campuses')
@@ -40,11 +38,16 @@ export function fetchCampuses () {
       });
   };
 }
-
-export function deleteCampus (campusId) {
-  return function thunk () {
-    return axios.delete(`/api/campuses/${campusId}`)
-      .then(fetchCampuses());
+//updating an existing campus
+export function putCampus (campusId, history) {
+  return function thunk (dispatch) {
+    return axios.put(`/api/campuses/${campusId}`)
+      .then(res => res.data)
+      .then(editedCampus => {
+        console.log('updated campus from ajax call in updateCampus', editedCampus);
+        dispatch(updateCampus(editedCampus));//updates store.state.campus
+        history.push(`/campuses/${editedCampus.id}`);
+      });
   };
 }
 
@@ -53,26 +56,39 @@ export function postCampus (campus, history) {
     return axios.post('/api/campuses', campus)
       .then(res => res.data)
       .then(newCampus => {
-        const action = getCampus(newCampus[0]);
-        console.log('new campus from ajax call', newCampus[0]);
+        const action = createCampus(newCampus);
+        console.log('new campus from ajax call in postcampus thunk', newCampus);
         dispatch(action);
-        history.push(`/campuses/${newCampus[0].id}`);
+        history.push(`/campuses/${newCampus.id}`);
       });
+  };
+}
+export function removeCampus (campusId) {
+  return function thunk (dispatch) {
+    return axios.delete(`/api/campuses/${campusId}`)
+      .then(dispatch(deleteCampus(campusId)));
   };
 }
 
 //REDUCER
-//adding a new campus changes the store state
-export default function reducer (state = [], action) {
+export default function reducer (campuses = [], action) {
   switch (action.type) {
 
     case GET_CAMPUSES:
       return action.campuses;
 
-    case GET_CAMPUS:
-      return [...state, action.campus];
+    case CREATE_CAMPUS:
+      return [action.campus, ...campuses];
+
+    case UPDATE_CAMPUS:
+      return campuses.map(campus => (
+        action.campus.id === campus.id ? action.campus : campus
+      ));
+
+    case DELETE_CAMPUS:
+      return campuses.filter(campus => campus.id !== action.campusId);
 
     default:
-      return state;
+      return campuses;
   }
 }

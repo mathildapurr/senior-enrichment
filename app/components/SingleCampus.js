@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { updateCampus, deleteCampus } from '../reducers';
+
 //renders the selected campus or a form to edit
 function SingleCampus (props) {
   console.log('single campus component received props: ', props);
-  const { campus, students, editCampus, handleClick } = props;
+  const { campus, students, handleClick } = props;
   return (
-    
+
       //decide which component to render: editcampus or campusinfo
       Object.keys(editCampus).length === 0 ? <CampusInfo /> : <EditCampus />
       <div className="container">
@@ -71,9 +72,7 @@ const mapStateToProps = function (state, ownProps) {
   console.log('state campuses', state.campuses);
   return {
     campus: state.campuses.find(campus => campus.id === campusId),
-    students: state.students.filter(student => student.campusId === campusId),
-    editCampus: state.editCampus,
-    campusId
+    students: state.students.filter(student => student.campusId === campusId)
   };
 };
 
