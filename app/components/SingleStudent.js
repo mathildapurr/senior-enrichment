@@ -4,6 +4,7 @@ import { fetchStudents } from '../reducers';
 import { NavLink } from 'react-router-dom';
 
 function SingleStudent (props) {
+  const student =
   const { student, campus } = props;
   console.log(props);
   return (
@@ -57,8 +58,8 @@ const mapStateToProps = function (state, ownProps) {
   console.log('state.students = ', state.students);
   let student = state.students.find(singleStudent => singleStudent.id === studentId);
   return {
-    student: student,
-    campus: state.campuses.find(campus => student.campusId === campus.id),
+    students: state.students,
+    campuses: state.campuses.find(campus => student.campusId === campus.id),
     studentId
   };
 };

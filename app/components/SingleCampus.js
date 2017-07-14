@@ -7,12 +7,9 @@ function SingleCampus (props) {
   console.log('single campus component received props: ', props);
   const { campus, students, editCampus, handleClick } = props;
   return (
-    {
+    
       //decide which component to render: editcampus or campusinfo
-      if (Object.keys(editCampus).length === 0){
-
-      }
-    }
+      Object.keys(editCampus).length === 0 ? <CampusInfo /> : <EditCampus />
       <div className="container">
         <div>
           <h3>{ campus.name }</h3>
@@ -43,7 +40,8 @@ function SingleCampus (props) {
         <button onClick = {handleClick} type="button" className="btn-btn-danger" name="delete">Delete</button>
       </div>
     </div>
-  );
+      }
+      );
 }
 
 class SingleCampusLoader extends Component {
