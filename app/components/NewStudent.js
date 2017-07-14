@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getStudent, postStudent } from '../reducers';
+import { postStudent } from '../reducers';
 
 function NewStudent(props){
 
-  const { newStudent, handleSubmit } = props;
-  const {name, email, campusId} = newStudent;
+  const { handleSubmit } = props;
 
   return (
     <div className="container">
     <form onSubmit={handleSubmit}>
       <label className="col-sm-2 control-label">Name</label>
       <div className="col-sm-10">
-        <input value={name} type="text" className="form-control" placeholder="student" aria-describedby="basic-addon1" name="studentName"/>
+        <input type="text" className="form-control" placeholder="student" aria-describedby="basic-addon1" name="studentName"/>
       </div>
       <label className="col-sm-2 control-label">Email</label>
         <div className="col-sm-10">
-          <input value={email} type="text" className="form-control" placeholder="student@gmail.com" aria-describedby="basic-addon1" name="email"/>
+          <input type="text" className="form-control" placeholder="student@gmail.com" aria-describedby="basic-addon1" name="email"/>
       </div>
       <label className="col-sm-2 control-label">Campus</label>
       <div className=" col-sm-10">
-        <input value={campusId} type="number" className="form-control" placeholder="1" aria-describedby="basic-addon2" name="campusId" />
+        <input type="number" className="form-control" placeholder="1" aria-describedby="basic-addon2" name="campusId" />
       </div>
       <div className="form-group col-sm-offset-2 col-sm-10">
         <button type="submit" className="btn btn-default">Submit</button>
@@ -31,11 +30,7 @@ function NewStudent(props){
   )
 }
 
-const mapStateToProps = function (state) {
-  return {
-    newStudent: state.newStudent
-  };
-};
+const mapStateToProps = null;
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {

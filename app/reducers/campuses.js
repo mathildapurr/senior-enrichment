@@ -39,9 +39,9 @@ export function fetchCampuses () {
   };
 }
 //updating an existing campus
-export function putCampus (campusId, history) {
+export function putCampus (campus, history) {
   return function thunk (dispatch) {
-    return axios.put(`/api/campuses/${campusId}`)
+    return axios.put(`/api/campuses/${campus.id}`)
       .then(res => res.data)
       .then(editedCampus => {
         console.log('updated campus from ajax call in updateCampus', editedCampus);
@@ -56,10 +56,10 @@ export function postCampus (campus, history) {
     return axios.post('/api/campuses', campus)
       .then(res => res.data)
       .then(newCampus => {
-        const action = createCampus(newCampus);
+        const action = createCampus(newCampus[0]);
         console.log('new campus from ajax call in postcampus thunk', newCampus);
         dispatch(action);
-        history.push(`/campuses/${newCampus.id}`);
+        history.push(`/campuses/${newCampus[0].id}`);
       });
   };
 }

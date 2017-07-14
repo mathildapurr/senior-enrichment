@@ -16,11 +16,7 @@ studentRouter.get('/', function(req, res, next){
 //need campusid here because we fill in that info in ajax request body
 studentRouter.post('/', function(req, res, next){
   Student.findOrCreate({
-    where: {
-      name: req.body.name,
-      email: req.body.email,
-      campusId: req.body.campusId
-    }
+    where: req.body
   })
   .then(newStudent => {
     console.log('newstudent after post request: ', newStudent);

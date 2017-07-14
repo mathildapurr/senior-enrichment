@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { Router } from 'react-router';
+//import { Router } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchCampuses, fetchStudents } from './reducers';
+
 import Main from './components/Main';
 import All from './components/All';
 import SingleCampus from './components/SingleCampus';
 import SingleStudent from './components/SingleStudent';
+import NewCampus from './components/NewCampus';
+import NewStudent from './components/NewStudent';
+import EditCampus from './components/EditCampus';
+
+//import history from './history';
 
 class Routes extends Component {
 
   componentDidMount () {
+    console.log('mounted routes');
     this.props.fetchInitialData();
   }
 
@@ -19,6 +27,9 @@ class Routes extends Component {
       <Router>
         <Main>
           <Switch>
+            <Route exact path="/new-campus" component={NewCampus} />
+            <Route path="/new-student" component={NewStudent} />
+            <Route exact path="campuses/edit-campus" component={EditCampus} />
             <Route exact path="/campuses/:campusId" component={SingleCampus} />
             <Route exact path="/students/:studentId" component={SingleStudent} />
             <Route path="/(campuses|students)/" component={All} />

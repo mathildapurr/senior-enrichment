@@ -2,7 +2,7 @@
 
 const SELECTED_CAMPUS = 'SELECTED_CAMPUS';
 
-export function selectedCampus(campus){
+export function selectedCampusId(campus){
   const action = { type: SELECTED_CAMPUS, campus };
   return action.campus;
 }

@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { updateCampus, deleteCampus } from '../reducers';
+import { selectedCampus, deleteCampus } from '../reducers';
 
-//renders the selected campus or a form to edit
+//renders the selected campus using info: campus, students
 function SingleCampus (props) {
-  console.log('single campus component received props: ', props);
-  const { campus, students, handleClick } = props;
-  return (
 
-      //decide which component to render: editcampus or campusinfo
-      Object.keys(editCampus).length === 0 ? <CampusInfo /> : <EditCampus />
+  console.log('single campus component received props: ', props);
+
+  const { campus, students, onClickEvent} = props;
+
+  return (
       <div className="container">
         <div>
           <h3>{ campus.name }</h3>
@@ -37,27 +37,24 @@ function SingleCampus (props) {
           }
           </tbody>
         </table>
-        <button onClick = {handleClick} type="button" className="btn-btn-warning" name="edit">Edit</button>
-        <button onClick = {handleClick} type="button" className="btn-btn-danger" name="delete">Delete</button>
+        <NavLink to={`edit-campus`}><button onClick = {onClickEvent} type="button" className="btn-btn-warning" name="edit">Edit</button></NavLink>
+        <button onClick = {onClickEvent} type="button" className="btn-btn-danger" name="delete">Delete</button>
       </div>
-    </div>
-      }
-      );
+    </div>);
 }
 
 class SingleCampusLoader extends Component {
 
-  // componentDidMount () {
-  //   console.log('component did mount campuses', this.props.campuses);
-  //   if (!this.props.campuses.length){
-  //     console.log('no length');
-  //     this.props.campuses = this.props.fetchCampuses();
-  //   }
-  // }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.campus.id !== this.props.campus.id) {
+    if (nextProps.campus.id !== this.props.campus.id){
       this.props.campus = nextProps.campus;
     }
+  }
+  onClickEvent(evt){
+    const campus = this.props.campus;
+    console.log('onclick campus is ', campus);
+    evt.preventDefault();
+    this.props.handleClick(evt, campus);
   }
   render () {
     return (
@@ -68,8 +65,7 @@ class SingleCampusLoader extends Component {
 
 const mapStateToProps = function (state, ownProps) {
   const campusId = Number(ownProps.match.params.campusId);
-  console.log('campusid', campusId);
-  console.log('state campuses', state.campuses);
+  console.log(state);
   return {
     campus: state.campuses.find(campus => campus.id === campusId),
     students: state.students.filter(student => student.campusId === campusId)
@@ -77,15 +73,15 @@ const mapStateToProps = function (state, ownProps) {
 };
 
 const mapDispatchToProps = function(dispatch, ownProps) {
-  const campusId = Number(ownProps.match.params.campusId);
+  //const campusId = Number(ownProps.match.params.campusId);
   return {
-    handleClick (evt) {
+    handleClick (evt, campus) {
       evt.preventDefault();
       console.log('button clicked');
-      evt.target.name === 'edit' ? dispatch(updateCampus(campusId, ownProps.history)) : dispatch(deleteCampus(campusId));
+      evt.target.name === 'edit' ? dispatch(selectedCampus(campus)) : dispatch(deleteCampus(campus.id));
     }
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleCampusLoader);
 

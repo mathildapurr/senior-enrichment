@@ -55,10 +55,10 @@ export function postStudent (student, history) {
     return axios.post('/api/students', student)
       .then(res => res.data)
       .then(newStudent => {
-        dispatch(updateStudent(newStudent));
-        console.log('newly created student from postStudent ajax call: ', newStudent);
+        dispatch(createStudent(newStudent));
+        console.log('newly created student from postStudent ajax call: ', newStudent[0]);
         //why is newStudent an array?????????
-        history.push(`/students/${newStudent.id}`);
+        history.push(`/students/${newStudent[0].id}`);
       });
   };
 }

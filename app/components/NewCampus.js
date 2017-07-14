@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getCampus, postCampus } from '../reducers';
+import { postCampus } from '../reducers';
 
 function NewCampus(props){
   //const dummyCampus = {name: 'name', description: 'description', image: 'imageURL'}
-  const { newCampus, handleSubmit } = props;
+  const { handleSubmit } = props;
 
   return (
     <div className="container">
     <form onSubmit={handleSubmit}>
       <label className="col-sm-2 control-label">Campus Name</label>
       <div className= "col-sm-10">
-        <input ref={(input) => newCampus.name = input} type="text" className="form-control" placeholder="Campus" aria-describedby="basic-addon1" name="campusName"/>
+        <input type="text" className="form-control" placeholder="Campus" aria-describedby="basic-addon1" name="campusName"/>
       </div>
       <label className="col-sm-2 control-label">Description</label>
         <div className="col-sm-10">
-          <input ref={(input) => newCampus.description = input} type="text" className="form-control" placeholder="best campus in the universe" aria-describedby="basic-addon1" name="description"/>
+          <input type="text" className="form-control" placeholder="best campus in the universe" aria-describedby="basic-addon1" name="description"/>
       </div>
       <label className="col-sm-2 control-label">Campus</label>
       <div className="col-sm-10">
-        <input ref={(input) => newCampus.image = input} type="text" className="form-control" placeholder="http://campusimage.com" aria-describedby="basic-addon2" name="image" />
+        <input type="text" className="form-control" placeholder="http://campusimage.com" aria-describedby="basic-addon2" name="image" />
       </div>
       <div className="form-group col-sm-offset-2 col-sm-10">
         <button type="submit" className="btn btn-default">Submit</button>
@@ -29,14 +29,14 @@ function NewCampus(props){
     </div>
   );
 }
-
-const mapStateToProps = function (state) {
-  console.log(state.campuses);
-  let dummyCampus = {name: '', description: '', image: ''};
-  return {
-    newCampus: state.campuses[state.campuses.length-1] || dummyCampus
-  };
-};
+const mapStateToProps = null;
+// const mapStateToProps = function (state) {
+//   console.log(state.campuses);
+//   //let dummyCampus = {name: '', description: '', image: ''};
+//   return {
+//     campuses: state.campuses
+//   };
+// };
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {

@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { fetchStudents } from '../reducers';
+import { selectedStudent, deleteStudent } from '../reducers';
 import { NavLink } from 'react-router-dom';
 
 function SingleStudent (props) {
-  const student =
-  const { student, campus } = props;
+  const { student, campus, onClickEvent } = props;
   console.log(props);
   return (
       <div className="container">
@@ -31,8 +30,8 @@ function SingleStudent (props) {
             </tr>
           </tbody>
         </table>
-        <button type="button" className="btn-btn-warning">Edit</button>
-        <button type="button" className="btn-btn-danger">Delete</button>
+        <button onClick = {onClickEvent} type="button" className="btn-btn-warning">Edit</button>
+        <button onClick = {onClickEvent} type="button" className="btn-btn-danger">Delete</button>
       </div>
     </div>
   );
@@ -45,6 +44,11 @@ class SingleStudentLoader extends Component {
       this.props.student = nextProps.student;
     }
   }
+  onClickEvent(evt){
+    const student = this.props.student;
+    evt.preventDefault();
+    this.props.handleClick(evt, student);
+  }
   render () {
     return (
       <SingleStudent {...this.props} />
@@ -55,14 +59,23 @@ class SingleStudentLoader extends Component {
 const mapStateToProps = function (state, ownProps) {
   const studentId = Number(ownProps.match.params.studentId);
   console.log('student id', studentId);
-  console.log('state.students = ', state.students);
   let student = state.students.find(singleStudent => singleStudent.id === studentId);
   return {
-    students: state.students,
-    campuses: state.campuses.find(campus => student.campusId === campus.id),
-    studentId
+    student: state.students.find(oneStudent => oneStudent.id === studentId),
+    campus: state.campuses.find(campus => student.campusId === campus.id)
   };
 };
 
-export default connect(mapStateToProps)(SingleStudentLoader);
+const mapDispatchToProps = function(dispatch, ownProps) {
+  const studentId = Number(ownProps.match.params.campusId);
+  return {
+    handleClick (evt, student) {
+      evt.preventDefault();
+      console.log('button clicked');
+      evt.target.name === 'edit' ? dispatch(selectedStudent(student)) : dispatch(deleteStudent(studentId));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleStudentLoader);
 
